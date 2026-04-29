@@ -14,10 +14,8 @@ openBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     cover.style.display = "none";
-
     mainContent.classList.remove("hidden");
     mainContent.classList.add("main-show");
-
     musicBtn.classList.remove("hidden");
 
     window.scrollTo(0, 0);
@@ -45,32 +43,46 @@ const params = new URLSearchParams(window.location.search);
 const guest = params.get("to");
 const ket = params.get("ket");
 
-if (guest) {
-  document.getElementById("guestName").textContent = guest;
+if (guest) document.getElementById("guestName").textContent = guest;
+if (ket) document.getElementById("guestNote").textContent = ket;
+
+// Countdown
+function updateCountdown(targetDate, ids) {
+  const target = new Date(targetDate).getTime();
+
+  setInterval(() => {
+    const now = new Date().getTime();
+    const distance = target - now;
+
+    if (distance <= 0) {
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = "00";
+      });
+      return;
+    }
+
+    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((distance / (1000 * 60)) % 60);
+    const s = Math.floor((distance / 1000) % 60);
+
+    const values = [d, h, m, s];
+
+    ids.forEach((id, index) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(values[index]).padStart(2, "0");
+    });
+  }, 1000);
 }
 
-if (ket) {
-  document.getElementById("guestNote").textContent = ket;
-}
+updateCountdown("May 31, 2026 10:00:00", [
+  "days",
+  "hours",
+  "minutes",
+  "seconds"
+]);
 
-// Countdown utama
-function updateMainCountdown() {
-  const target = new Date("May 31, 2026 10:00:00").getTime();
-  const now = new Date().getTime();
-  const distance = target - now;
-
-  if (distance <= 0) return;
-
-  document.getElementById("days").textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
-  document.getElementById("hours").textContent = Math.floor((distance / (1000 * 60 * 60)) % 24);
-  document.getElementById("minutes").textContent = Math.floor((distance / (1000 * 60)) % 60);
-  document.getElementById("seconds").textContent = Math.floor((distance / 1000) % 60);
-}
-
-setInterval(updateMainCountdown, 1000);
-updateMainCountdown();
-
-// Countdown kecil untuk resepsi
 function miniCountdown(targetDate, elementId) {
   const target = new Date(targetDate).getTime();
   const element = document.getElementById(elementId);
@@ -103,7 +115,46 @@ function miniCountdown(targetDate, elementId) {
 miniCountdown("May 31, 2026 13:00:00", "countResepsi1");
 miniCountdown("August 2, 2026 09:00:00", "countResepsi2");
 
-// Ucapan
+// Konfirmasi Kehadiran
+const attendanceForm = document.getElementById("attendanceForm");
+const attendanceList = document.getElementById("attendanceList");
+
+let attendances = JSON.parse(localStorage.getItem("attendances")) || [];
+
+function renderAttendances() {
+  if (!attendanceList) return;
+
+  attendanceList.innerHTML = "";
+
+  attendances.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "wish-item";
+    div.innerHTML = `
+      <strong>${item.name}</strong>
+      <p>${item.status}</p>
+    `;
+    attendanceList.appendChild(div);
+  });
+}
+
+if (attendanceForm) {
+  attendanceForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("attendanceName").value;
+    const status = document.getElementById("attendanceStatus").value;
+
+    attendances.unshift({ name, status });
+    localStorage.setItem("attendances", JSON.stringify(attendances));
+
+    attendanceForm.reset();
+    renderAttendances();
+  });
+}
+
+renderAttendances();
+
+// Wedding Wish
 const wishForm = document.getElementById("wishForm");
 const wishList = document.getElementById("wishList");
 
