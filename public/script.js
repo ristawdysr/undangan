@@ -21,7 +21,7 @@ openBtn.addEventListener("click", () => {
     window.scrollTo(0, 0);
 
     bgMusic.play().catch(() => {
-      console.log("Musik belum bisa autoplay.");
+      console.log("Autoplay blocked");
     });
 
     AOS.refresh();
@@ -38,153 +38,111 @@ musicBtn.addEventListener("click", () => {
   }
 });
 
-// Nama tamu dari URL
+
+// =======================
+// 🔹 AMBIL NAMA TAMU
+// =======================
+
 const params = new URLSearchParams(window.location.search);
 const guest = params.get("to");
 const ket = params.get("ket");
 
-if (guest) document.getElementById("guestName").textContent = guest;
-if (ket) document.getElementById("guestNote").textContent = ket;
-
-// Countdown
-function updateCountdown(targetDate, ids) {
-  const target = new Date(targetDate).getTime();
-
-  setInterval(() => {
-    const now = new Date().getTime();
-    const distance = target - now;
-
-    if (distance <= 0) {
-      ids.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = "00";
-      });
-      return;
-    }
-
-    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((distance / (1000 * 60)) % 60);
-    const s = Math.floor((distance / 1000) % 60);
-
-    const values = [d, h, m, s];
-
-    ids.forEach((id, index) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = String(values[index]).padStart(2, "0");
-    });
-  }, 1000);
+if (guest) {
+  document.getElementById("guestName").textContent = guest;
 }
 
-updateCountdown("May 31, 2026 10:00:00", [
-  "days",
-  "hours",
-  "minutes",
-  "seconds"
-]);
-
-function miniCountdown(targetDate, elementId) {
-  const target = new Date(targetDate).getTime();
-  const element = document.getElementById(elementId);
-
-  if (!element) return;
-
-  setInterval(() => {
-    const now = new Date().getTime();
-    const distance = target - now;
-
-    if (distance <= 0) {
-      element.innerHTML = "<span>Acara berlangsung</span>";
-      return;
-    }
-
-    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const h = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const m = Math.floor((distance / (1000 * 60)) % 60);
-    const s = Math.floor((distance / 1000) % 60);
-
-    element.innerHTML = `
-      <span>${d}<small>Hari</small></span>
-      <span>${h}<small>Jam</small></span>
-      <span>${m}<small>Menit</small></span>
-      <span>${s}<small>Detik</small></span>
-    `;
-  }, 1000);
+if (ket) {
+  document.getElementById("guestNote").textContent = ket;
 }
 
-miniCountdown("May 31, 2026 13:00:00", "countResepsi1");
-miniCountdown("August 2, 2026 09:00:00", "countResepsi2");
 
-// Konfirmasi Kehadiran
-const attendanceForm = document.getElementById("attendanceForm");
-const attendanceList = document.getElementById("attendanceList");
+// =======================
+// 🔹 COUNTDOWN
+// =======================
 
-let attendances = JSON.parse(localStorage.getItem("attendances")) || [];
+function updateCountdown() {
+  const target = new Date("May 31, 2026 10:00:00").getTime();
+  const now = new Date().getTime();
+  const distance = target - now;
 
-function renderAttendances() {
-  if (!attendanceList) return;
+  if (distance <= 0) return;
 
-  attendanceList.innerHTML = "";
-
-  attendances.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "wish-item";
-    div.innerHTML = `
-      <strong>${item.name}</strong>
-      <p>${item.status}</p>
-    `;
-    attendanceList.appendChild(div);
-  });
+  document.getElementById("days").textContent = Math.floor(distance / (1000 * 60 * 60 * 24));
+  document.getElementById("hours").textContent = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  document.getElementById("minutes").textContent = Math.floor((distance / (1000 * 60)) % 60);
+  document.getElementById("seconds").textContent = Math.floor((distance / 1000) % 60);
 }
 
-if (attendanceForm) {
-  attendanceForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
-    const name = document.getElementById("attendanceName").value;
-    const status = document.getElementById("attendanceStatus").value;
 
-    attendances.unshift({ name, status });
-    localStorage.setItem("attendances", JSON.stringify(attendances));
+// =======================
+// SUPABASE SETUP
+// =======================
 
-    attendanceForm.reset();
-    renderAttendances();
-  });
-}
+const SUPABASE_URL = "https://uazzbikvmhbdznywifey.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xoIyGqBfkzXsFPSVGF2E4A_zDWKQnMz";
 
-renderAttendances();
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Wedding Wish
 const wishForm = document.getElementById("wishForm");
 const wishList = document.getElementById("wishList");
 
-let wishes = JSON.parse(localStorage.getItem("wishes")) || [];
+async function loadWishes() {
+  const { data, error } = await supabaseClient
+    .from("wedding_wishes")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-function renderWishes() {
+  if (error) {
+    console.log("Gagal mengambil ucapan:", error);
+    return;
+  }
+
   wishList.innerHTML = "";
 
-  wishes.forEach((wish) => {
-    const item = document.createElement("div");
-    item.className = "wish-item";
-    item.innerHTML = `
-      <strong>${wish.name}</strong>
-      <p>${wish.message}</p>
+  data.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "wish-item";
+
+    div.innerHTML = `
+      <strong>${item.name}</strong>
+      <small>${item.attendance}</small>
+      <p>${item.message}</p>
     `;
-    wishList.appendChild(item);
+
+    wishList.appendChild(div);
   });
 }
 
-wishForm.addEventListener("submit", (e) => {
+wishForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("nameInput").value;
+  const attendance = document.getElementById("attendanceStatus").value;
   const message = document.getElementById("messageInput").value;
 
-  wishes.unshift({ name, message });
-  localStorage.setItem("wishes", JSON.stringify(wishes));
+  const { error } = await supabaseClient
+    .from("wedding_wishes")
+    .insert([
+      {
+        name,
+        attendance,
+        message,
+        guest_name: guest || null,
+        guest_note: ket || null
+      }
+    ]);
+
+  if (error) {
+    alert("Ucapan gagal dikirim.");
+    console.log("Gagal mengirim ucapan:", error);
+    return;
+  }
 
   wishForm.reset();
-  renderWishes();
+  loadWishes();
 });
 
-renderWishes();
+loadWishes();
