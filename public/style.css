@@ -538,13 +538,14 @@ body {
 
 /* Scroll per section */
 .snap-wrapper {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity !important;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
 }
 
 .snap-section {
-  min-height: 100vh;
   scroll-snap-align: start;
-  position: relative;
+  scroll-snap-stop: normal !important;
 }
 
 /* Background cover untuk semua section selain mempelai */
@@ -953,12 +954,6 @@ body {
   line-height: 1.65 !important;
 }
 
-.gallery-grid-new {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-}
-
 /* =========================
    REVISI STORY FULL TEXT
 ========================= */
@@ -987,42 +982,85 @@ body {
 
 .story-card p:first-child::first-letter {
   font-family: "Cormorant Garamond", serif;
-  font-size: 56px;
-  line-height: 0.85;
+  font-size: 72px;
+  line-height: 0.72;
   float: left;
   color: #d9a36a;
-  padding-right: 8px;
+  padding-right: 10px;
+  padding-top: 8px;
+  font-weight: 700;
 }
 
 /* =========================
    GALLERY CAROUSEL
 ========================= */
 
-.gallery-carousel {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 16px 4px 22px;
-  scrollbar-width: none;
+.gallery {
+  overflow: hidden;
 }
 
-.gallery-carousel::-webkit-scrollbar {
-  display: none;
+.gallery-carousel {
+  position: relative;
+  gap: 18px;
+  padding: 10px 0 24px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+}
+
+.gallery-carousel:active {
+  cursor: grabbing;
 }
 
 .gallery-carousel img {
-  flex: 0 0 78%;
-  height: 420px;
+  flex: 0 0 82%;
+  height: 520px !important;
   object-fit: cover;
-  border-radius: 28px;
+  border-radius: 30px;
   scroll-snap-align: center;
-  filter: brightness(0.92);
+  filter: brightness(0.95);
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-@media (min-width: 700px) {
+.gallery-carousel img.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* blur kanan kiri */
+.gallery::before,
+.gallery::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.gallery::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(5,5,5,0.9), transparent);
+}
+
+.gallery::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(5,5,5,0.9), transparent);
+}
+
+@media (max-width: 640px) {
   .gallery-carousel img {
-    flex-basis: 42%;
+    flex-basis: 86%;
+    height: 540px !important;
+  }
+
+  .gallery::before,
+  .gallery::after {
+    width: 34px;
   }
 }
 
@@ -1222,4 +1260,60 @@ body {
     max-height: 72vh;
     padding: 18px;
   }
+}
+
+.snap-section {
+  padding-top: 36px !important;
+  padding-bottom: 36px !important;
+}
+
+.hero,
+.event,
+.gallery,
+.gift,
+.rsvp,
+.countdown,
+.story,
+.thanks-section {
+  justify-content: flex-start !important;
+}
+
+.event.section,
+.gallery.section,
+.gift.section,
+.rsvp.section,
+.countdown.section,
+.story.section {
+  padding-top: 52px !important;
+}
+
+.event.section {
+  padding-top: 44px !important;
+}
+
+.event h2 {
+  margin-bottom: 28px !important;
+}
+
+.church-box h3 {
+  font-size: 26px !important;
+}
+
+.church-box p {
+  font-size: 13px !important;
+}
+
+@media (max-width: 640px) {
+  .church-box h3 {
+    font-size: 23px !important;
+  }
+
+  .event h2 {
+    font-size: 28px !important;
+  }
+}
+
+.story h2 {
+  margin-top: 0 !important;
+  margin-bottom: 22px !important;
 }

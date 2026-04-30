@@ -148,55 +148,87 @@ wishForm.addEventListener("submit", async (e) => {
 loadWishes();
 
 // =======================
-// GALLERY AUTO CAROUSEL
+// GALLERY AUTO CAROUSEL SMOOTH
 // =======================
 
 const galleryCarousel = document.getElementById("galleryCarousel");
 
 if (galleryCarousel) {
-  let galleryInterval;
+  let galleryTimer;
   let isHolding = false;
 
-  function startGalleryAutoSlide() {
-    galleryInterval = setInterval(() => {
-      if (isHolding) return;
+  const images = galleryCarousel.querySelectorAll("img");
 
-      const maxScroll = galleryCarousel.scrollWidth - galleryCarousel.clientWidth;
-      const next = galleryCarousel.scrollLeft + galleryCarousel.clientWidth * 0.82;
+  images.forEach((img) => {
+    if (img.complete) {
+      img.classList.add("loaded");
+    } else {
+      img.addEventListener("load", () => {
+        img.classList.add("loaded");
+      });
+    }
+  });
 
-      if (next >= maxScroll - 20) {
-        galleryCarousel.scrollTo({
-          left: 0,
-          behavior: "smooth"
-        });
-      } else {
-        galleryCarousel.scrollTo({
-          left: next,
-          behavior: "smooth"
-        });
-      }
-    }, 2800);
+  function getSlideWidth() {
+    const firstImage = galleryCarousel.querySelector("img");
+    if (!firstImage) return 300;
+
+    const gap = 18;
+    return firstImage.offsetWidth + gap;
+  }
+
+  function autoSlideGallery() {
+    if (isHolding) return;
+
+    const slideWidth = getSlideWidth();
+    const maxScroll = galleryCarousel.scrollWidth - galleryCarousel.clientWidth;
+    const nextScroll = galleryCarousel.scrollLeft + slideWidth;
+
+    if (nextScroll >= maxScroll - 10) {
+      galleryCarousel.scrollTo({
+        left: 0,
+        behavior: "smooth"
+      });
+    } else {
+      galleryCarousel.scrollTo({
+        left: nextScroll,
+        behavior: "smooth"
+      });
+    }
+  }
+
+  function startGallery() {
+    stopGallery();
+    galleryTimer = setInterval(autoSlideGallery, 3200);
+  }
+
+  function stopGallery() {
+    clearInterval(galleryTimer);
   }
 
   galleryCarousel.addEventListener("touchstart", () => {
     isHolding = true;
+    stopGallery();
   });
 
   galleryCarousel.addEventListener("touchend", () => {
     setTimeout(() => {
       isHolding = false;
+      startGallery();
     }, 1200);
   });
 
   galleryCarousel.addEventListener("mousedown", () => {
     isHolding = true;
+    stopGallery();
   });
 
   galleryCarousel.addEventListener("mouseup", () => {
     setTimeout(() => {
       isHolding = false;
+      startGallery();
     }, 1200);
   });
 
-  startGalleryAutoSlide();
+  startGallery();
 }
