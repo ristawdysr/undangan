@@ -98,7 +98,7 @@ if (galleryCarousel) {
 
   function moveGallery() {
     if (!isHolding) {
-      galleryCarousel.scrollLeft += 0.25;
+      galleryCarousel.scrollLeft += 0.5;
 
       const loopPoint = galleryCarousel.scrollWidth / 2;
 
