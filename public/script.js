@@ -76,6 +76,51 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
+// =======================
+// GALLERY AUTO CAROUSEL LOOP
+// =======================
+
+const galleryCarousel = document.getElementById("galleryCarousel");
+
+if (galleryCarousel) {
+  let isHolding = false;
+
+  const originalImages = Array.from(galleryCarousel.querySelectorAll("img"));
+
+  originalImages.forEach((img) => {
+    const clone = img.cloneNode(true);
+    galleryCarousel.appendChild(clone);
+  });
+
+  galleryCarousel.querySelectorAll("img").forEach((img) => {
+    img.classList.add("loaded");
+  });
+
+  function moveGallery() {
+    if (!isHolding) {
+      galleryCarousel.scrollLeft += 0.8;
+
+      const loopPoint = galleryCarousel.scrollWidth / 2;
+
+      if (galleryCarousel.scrollLeft >= loopPoint) {
+        galleryCarousel.scrollLeft = 0;
+      }
+    }
+
+    requestAnimationFrame(moveGallery);
+  }
+
+  galleryCarousel.addEventListener("touchstart", () => {
+    isHolding = true;
+  });
+
+  galleryCarousel.addEventListener("touchend", () => {
+    isHolding = false;
+  });
+
+  moveGallery();
+}
+
 
 // =======================
 // SUPABASE SETUP
@@ -147,79 +192,3 @@ wishForm.addEventListener("submit", async (e) => {
 
 loadWishes();
 
-// =======================
-// GALLERY AUTO CAROUSEL LOOP
-// =======================
-
-const galleryCarousel = document.getElementById("galleryCarousel");
-
-if (galleryCarousel) {
-  let galleryTimer;
-  let isHolding = false;
-
-  const originalImages = Array.from(galleryCarousel.querySelectorAll("img"));
-
-  originalImages.forEach((img) => {
-    const clone = img.cloneNode(true);
-    galleryCarousel.appendChild(clone);
-  });
-
-  const images = galleryCarousel.querySelectorAll("img");
-
-  images.forEach((img) => {
-    if (img.complete) {
-      img.classList.add("loaded");
-    } else {
-      img.addEventListener("load", () => {
-        img.classList.add("loaded");
-      });
-    }
-  });
-
-  function autoSlideGallery() {
-    if (isHolding) return;
-
-    galleryCarousel.scrollLeft += 1;
-
-    const loopPoint = galleryCarousel.scrollWidth / 2;
-
-    if (galleryCarousel.scrollLeft >= loopPoint) {
-      galleryCarousel.scrollLeft = 0;
-    }
-  }
-
-  function startGallery() {
-    stopGallery();
-    galleryTimer = setInterval(autoSlideGallery, 16);
-  }
-
-  function stopGallery() {
-    clearInterval(galleryTimer);
-  }
-
-  galleryCarousel.addEventListener("touchstart", () => {
-    isHolding = true;
-    stopGallery();
-  });
-
-  galleryCarousel.addEventListener("touchend", () => {
-    setTimeout(() => {
-      isHolding = false;
-      startGallery();
-    }, 1200);
-  });
-
-  galleryCarousel.addEventListener("mousedown", () => {
-    isHolding = true;
-    stopGallery();
-  });
-
-  galleryCarousel.addEventListener("mouseup", () => {
-    setTimeout(() => {
-      isHolding = false;
-      startGallery();
-    }, 1200);
-  });
-
-  startGallery();
-}
