@@ -78,43 +78,48 @@
     </section>
 
     <!-- 5. Kisah -->
-    <section class="story section snap-section bg-cover-section">
+    <section class="story story-full section snap-section bg-cover-section">
       <p class="label">Our Story</p>
       <h2>Kisah Kami</h2>
 
-      <div class="timeline">
-        <div class="timeline-item left">
-          <div class="timeline-content">
-            <span>28 Juli 2024</span>
-            <h3>Awal Mengenal</h3>
-            <p>
-              Tuhan mempertemukan kami untuk pertama kalinya di gerbong Kereta Majapahit.
-              Pertemuan sederhana itu menjadi awal dari perjalanan kasih yang Tuhan rangkai dengan indah.
-            </p>
-          </div>
-        </div>
+      <div class="story-card">
+        <p>
+          Tidak ada satu pun pertemuan yang terjadi secara kebetulan di dalam rancangan Tuhan.
+          Segala sesuatu telah ditetapkan menurut waktu dan kehendak-Nya yang sempurna.
+        </p>
 
-        <div class="timeline-item right">
-          <div class="timeline-content">
-            <span>1 Agustus 2024</span>
-            <h3>Bakso Kereta Majapahit</h3>
-            <p>
-              Saat perjalanan menuju Pekalongan, kiriman bakso dari Pedro melalui temannya
-              menjadi perhatian kecil yang membawa kami semakin dekat.
-            </p>
-          </div>
-        </div>
+        <p>
+          Dalam cara yang sederhana namun penuh makna, Tuhan mempertemukan kami untuk pertama kalinya
+          di gerbong Kereta Majapahit. Sebuah pertemuan singkat yang pada awalnya tampak biasa,
+          namun ternyata menjadi awal dari perjalanan kasih yang Tuhan rangkai dengan begitu indah.
+          Dari pertemuan itu, kami mulai saling mengenal dan menjalin komunikasi melalui Instagram.
+        </p>
 
-        <div class="timeline-item left">
-          <div class="timeline-content">
-            <span>22 Juni 2025</span>
-            <h3>Lamaran</h3>
-            <p>
-              Setelah perjalanan panjang, kami melangkah ke tahap yang lebih serius
-              melalui lamaran dengan penuh syukur atas penyertaan Tuhan.
-            </p>
-          </div>
-        </div>
+        <p>
+          Seiring berjalannya waktu, Tuhan kembali menunjukkan penyertaan-Nya melalui hal-hal kecil
+          yang berkesan. Saat Rista melakukan perjalanan dinas menuju Pekalongan bersama beberapa rekan,
+          di tengah perjalanan seorang crew kereta tiba-tiba datang mengantarkan beberapa porsi bakso
+          ke tempat duduk kami.
+        </p>
+
+        <p>
+          Ternyata, perhatian sederhana itu adalah kiriman dari Pedro yang dititipkan melalui temannya
+          yang bekerja di kereta. Momen kecil tersebut menjadi salah satu cara Tuhan menumbuhkan kedekatan
+          di antara kami, sekaligus menghadirkan sukacita sederhana yang tak terlupakan.
+        </p>
+
+        <p>
+          Hari demi hari, kami belajar bahwa kasih bukan hanya tentang perasaan, tetapi juga tentang
+          bertumbuh bersama di dalam Tuhan. Melalui setiap percakapan, pertemuan, dan proses yang kami jalani,
+          Tuhan membawa kami semakin dekat—bukan hanya satu dengan yang lain, tetapi terlebih lagi semakin
+          dekat kepada-Nya.
+        </p>
+
+        <p>
+          Kini, dengan penuh syukur atas kasih dan penyertaan Tuhan, kami melangkah dalam komitmen kudus
+          untuk memulai babak kehidupan yang baru. Kami percaya, Dia yang telah mempertemukan kami akan terus
+          memimpin perjalanan rumah tangga kami dalam kasih, iman, dan pengharapan.
+        </p>
       </div>
     </section>
 
@@ -155,7 +160,7 @@
       <p class="label">Gallery</p>
       <h2>Our Moments</h2>
 
-      <div class="gallery-grid-new">
+      <div class="gallery-carousel" id="galleryCarousel">
         <img src="/foto/1.jpg" loading="lazy" decoding="async">
         <img src="/foto/2.jpg" loading="lazy" decoding="async">
         <img src="/foto/3.jpg" loading="lazy" decoding="async">
@@ -220,7 +225,7 @@
       <h2>Konfirmasi & Ucapan</h2>
 
       <div class="rsvp-grid">
-        <form id="wishForm">
+        <form id="wishForm" class="compact-form">
           <input type="text" id="nameInput" placeholder="Nama kamu" required>
 
           <select id="attendanceStatus" required>
@@ -234,7 +239,9 @@
           <button class="btn" type="submit">Kirim</button>
         </form>
 
-        <div id="wishList" class="wish-list scroll-wish"></div>
+        <div class="wish-ticker">
+          <div id="wishList" class="wish-list wish-track"></div>
+        </div>
       </div>
     </section>
 

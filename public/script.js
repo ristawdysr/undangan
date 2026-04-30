@@ -146,3 +146,57 @@ wishForm.addEventListener("submit", async (e) => {
 });
 
 loadWishes();
+
+// =======================
+// GALLERY AUTO CAROUSEL
+// =======================
+
+const galleryCarousel = document.getElementById("galleryCarousel");
+
+if (galleryCarousel) {
+  let galleryInterval;
+  let isHolding = false;
+
+  function startGalleryAutoSlide() {
+    galleryInterval = setInterval(() => {
+      if (isHolding) return;
+
+      const maxScroll = galleryCarousel.scrollWidth - galleryCarousel.clientWidth;
+      const next = galleryCarousel.scrollLeft + galleryCarousel.clientWidth * 0.82;
+
+      if (next >= maxScroll - 20) {
+        galleryCarousel.scrollTo({
+          left: 0,
+          behavior: "smooth"
+        });
+      } else {
+        galleryCarousel.scrollTo({
+          left: next,
+          behavior: "smooth"
+        });
+      }
+    }, 2800);
+  }
+
+  galleryCarousel.addEventListener("touchstart", () => {
+    isHolding = true;
+  });
+
+  galleryCarousel.addEventListener("touchend", () => {
+    setTimeout(() => {
+      isHolding = false;
+    }, 1200);
+  });
+
+  galleryCarousel.addEventListener("mousedown", () => {
+    isHolding = true;
+  });
+
+  galleryCarousel.addEventListener("mouseup", () => {
+    setTimeout(() => {
+      isHolding = false;
+    }, 1200);
+  });
+
+  startGalleryAutoSlide();
+}
