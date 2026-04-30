@@ -103,7 +103,7 @@ if (galleryCarousel) {
       frameCount++;
 
       // makin besar angkanya, makin pelan
-      if (frameCount % 4 === 0) {
+      if (frameCount % 3 === 0) {
         galleryCarousel.scrollLeft += 1;
       }
 
