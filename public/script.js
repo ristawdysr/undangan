@@ -159,7 +159,6 @@ if (galleryCarousel) {
 
   const originalImages = Array.from(galleryCarousel.querySelectorAll("img"));
 
-  // Duplikat gambar supaya carousel bisa looping mulus
   originalImages.forEach((img) => {
     const clone = img.cloneNode(true);
     galleryCarousel.appendChild(clone);
@@ -177,17 +176,14 @@ if (galleryCarousel) {
     }
   });
 
-  function getLoopPoint() {
-    return galleryCarousel.scrollWidth / 2;
-  }
-
   function autoSlideGallery() {
     if (isHolding) return;
 
-    const speed = 1.2;
-    galleryCarousel.scrollLeft += speed;
+    galleryCarousel.scrollLeft += 1;
 
-    if (galleryCarousel.scrollLeft >= getLoopPoint()) {
+    const loopPoint = galleryCarousel.scrollWidth / 2;
+
+    if (galleryCarousel.scrollLeft >= loopPoint) {
       galleryCarousel.scrollLeft = 0;
     }
   }
