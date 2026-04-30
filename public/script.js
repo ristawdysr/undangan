@@ -148,7 +148,7 @@ wishForm.addEventListener("submit", async (e) => {
 loadWishes();
 
 // =======================
-// GALLERY AUTO CAROUSEL SMOOTH
+// GALLERY AUTO CAROUSEL LOOP
 // =======================
 
 const galleryCarousel = document.getElementById("galleryCarousel");
@@ -156,6 +156,14 @@ const galleryCarousel = document.getElementById("galleryCarousel");
 if (galleryCarousel) {
   let galleryTimer;
   let isHolding = false;
+
+  const originalImages = Array.from(galleryCarousel.querySelectorAll("img"));
+
+  // Duplikat gambar supaya carousel bisa looping mulus
+  originalImages.forEach((img) => {
+    const clone = img.cloneNode(true);
+    galleryCarousel.appendChild(clone);
+  });
 
   const images = galleryCarousel.querySelectorAll("img");
 
@@ -169,37 +177,24 @@ if (galleryCarousel) {
     }
   });
 
-  function getSlideWidth() {
-    const firstImage = galleryCarousel.querySelector("img");
-    if (!firstImage) return 300;
-
-    const gap = 18;
-    return firstImage.offsetWidth + gap;
+  function getLoopPoint() {
+    return galleryCarousel.scrollWidth / 2;
   }
 
   function autoSlideGallery() {
     if (isHolding) return;
 
-    const slideWidth = getSlideWidth();
-    const maxScroll = galleryCarousel.scrollWidth - galleryCarousel.clientWidth;
-    const nextScroll = galleryCarousel.scrollLeft + slideWidth;
+    const speed = 1.2;
+    galleryCarousel.scrollLeft += speed;
 
-    if (nextScroll >= maxScroll - 10) {
-      galleryCarousel.scrollTo({
-        left: 0,
-        behavior: "smooth"
-      });
-    } else {
-      galleryCarousel.scrollTo({
-        left: nextScroll,
-        behavior: "smooth"
-      });
+    if (galleryCarousel.scrollLeft >= getLoopPoint()) {
+      galleryCarousel.scrollLeft = 0;
     }
   }
 
   function startGallery() {
     stopGallery();
-    galleryTimer = setInterval(autoSlideGallery, 3200);
+    galleryTimer = setInterval(autoSlideGallery, 16);
   }
 
   function stopGallery() {

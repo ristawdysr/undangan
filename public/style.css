@@ -996,17 +996,22 @@ body {
 ========================= */
 
 .gallery {
+  position: relative;
   overflow: hidden;
 }
 
 .gallery-carousel {
-  position: relative;
+  display: flex !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
   gap: 18px;
-  padding: 10px 0 24px;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-behavior: auto !important;
   -webkit-overflow-scrolling: touch;
-  cursor: grab;
+  scrollbar-width: none;
+}
+
+.gallery-carousel::-webkit-scrollbar {
+  display: none;
 }
 
 .gallery-carousel:active {
@@ -1028,6 +1033,14 @@ body {
 .gallery-carousel img.loaded {
   opacity: 1;
   transform: scale(1);
+}
+
+@media (max-width: 640px) {
+  .gallery-carousel img {
+    flex-basis: 86% !important;
+    max-width: 86% !important;
+    height: 540px !important;
+  }
 }
 
 /* blur kanan kiri */
