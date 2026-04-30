@@ -96,9 +96,16 @@ if (galleryCarousel) {
     img.classList.add("loaded");
   });
 
+  let frameCount = 0;
+
   function moveGallery() {
     if (!isHolding) {
-      galleryCarousel.scrollLeft += 0.5;
+      frameCount++;
+
+      // makin besar angkanya, makin pelan
+      if (frameCount % 4 === 0) {
+        galleryCarousel.scrollLeft += 1;
+      }
 
       const loopPoint = galleryCarousel.scrollWidth / 2;
 
