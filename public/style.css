@@ -1317,3 +1317,185 @@ body {
   margin-top: 0 !important;
   margin-bottom: 22px !important;
 }
+
+.event-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.event-box::before {
+  content: "❦";
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(217, 163, 106, 0.55);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.event-box::after {
+  content: "";
+  position: absolute;
+  top: 39px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(217, 163, 106, 0.65),
+    transparent
+  );
+}
+
+.event-box h3 {
+  margin-top: 22px !important;
+}
+
+.church-box::before {
+  content: "✦ ❦ ✦";
+  font-size: 18px;
+  letter-spacing: 8px;
+}
+
+.event-box h3::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 10px;
+  margin: 10px auto 12px;
+  border-top: 1px solid rgba(217, 163, 106, 0.7);
+  border-bottom: 1px solid rgba(217, 163, 106, 0.25);
+  border-radius: 999px;
+}
+
+.countdown {
+  justify-content: center !important;
+  text-align: center;
+}
+
+.countdown h2::before,
+.countdown h2::after,
+.gallery h2::before,
+.gallery h2::after,
+.gift h2::before,
+.gift h2::after,
+.event h2::before,
+.event h2::after,
+.rsvp h2::before,
+.rsvp h2::after {
+  content: "❦";
+  display: block;
+  color: rgba(217, 163, 106, 0.75);
+  font-size: 18px;
+  line-height: 1;
+  margin: 8px auto;
+}
+
+.count-box div {
+  position: relative;
+}
+
+.count-box div::before {
+  content: "✦";
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  color: rgba(217, 163, 106, 0.45);
+  font-size: 10px;
+}
+
+.count-box div::after {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 10px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(217, 163, 106, 0.45),
+    transparent
+  );
+}
+
+/* FIX GALLERY CAROUSEL */
+.gallery {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-carousel {
+  display: flex !important;
+  flex-direction: row !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 18px;
+  width: 100%;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gallery-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-carousel img {
+  flex: 0 0 86% !important;
+  max-width: 86% !important;
+  height: 520px !important;
+  object-fit: cover;
+  border-radius: 30px;
+  scroll-snap-align: center;
+}
+
+/* FIX COUNTDOWN TENGAH */
+.countdown.section {
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding-top: 0 !important;
+}
+
+.countdown .label,
+.countdown h2,
+.countdown .count-box {
+  width: 100%;
+}
+
+/* ORNAMEN DALAM KOTAK */
+.event-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.event-box::before {
+  content: "❦";
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(217, 163, 106, 0.65);
+  font-size: 22px;
+}
+
+.event-box::after {
+  content: "";
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95px;
+  height: 12px;
+  border-top: 1px solid rgba(217, 163, 106, 0.65);
+  border-bottom: 1px solid rgba(217, 163, 106, 0.25);
+  border-radius: 999px;
+}
+
+.event-box h3 {
+  margin-top: 34px !important;
+}
